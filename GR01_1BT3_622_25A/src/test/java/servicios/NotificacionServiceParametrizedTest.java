@@ -1,45 +1,34 @@
 package servicios;
 
 import entidades.Notificacion;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import java.util.stream.Stream;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-@RunWith(Parameterized.class)
 public class NotificacionServiceParametrizedTest {
-    @Parameterized.Parameters
-    public static Collection<Object[]> datosDePrueba() {
-        return Arrays.asList(new Object[][] {
-                // mensaje, leidaInicial, esperadoValido
-                { "Notificacion 1", false, true },   // no leída, debe devolver true
-                { "Notificacion 2", true, false },   // ya leída, debe devolver false
-        });
-    }
+    @ParameterizedTest
+    @MethodSource("datosDePrueba")
+    void testMarcarComoLeida(String mensaje, boolean leidaInicial, boolean esperadoValido) {
+        // Crear notificación con estado inicial
+        Notificacion notificacion = new Notificacion(mensaje);
+        notificacion.setLeida(leidaInicial);
 
-    private String mensaje;
-    private boolean leidaInicial;
-    private boolean esperadoValido;
+        // Ejecutar el método a probar
+        NotificacionService servicio = new NotificacionService(null, null);
+        boolean resultado = servicio.marcarComoLeida(notificacion);
 
-    public NotificacionServiceParametrizedTest(String mensaje, boolean leidaInicial, boolean esperadoValido) {
-        this.mensaje = mensaje;
-        this.leidaInicial = leidaInicial;
-        this.esperadoValido = esperadoValido;
-    }
-
-    @Test
-    public void given_already_read_notification_when_mark_as_read_then_return_false() {
-        Notificacion notificacion = null;
-        if (mensaje != null) {
-            notificacion = new Notificacion(mensaje);
-            notificacion.setLeida(leidaInicial);
-        }
-        NotificacionService notificacionService = new NotificacionService(null, null);
-        boolean resultado = notificacionService.marcarComoLeida(notificacion);
+        // Verificar el resultado
         assertEquals(esperadoValido, resultado);
+    }
+
+    private static Stream<Arguments> datosDePrueba() {
+        return Stream.of(
+                // mensaje,        leidaInicial,  esperadoValido
+                Arguments.of("Notificacion 1", false,         true),
+                Arguments.of("Notificacion 2", true,          false)
+        );
     }
 }

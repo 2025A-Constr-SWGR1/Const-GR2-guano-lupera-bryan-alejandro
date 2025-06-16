@@ -2,10 +2,12 @@ package servicios;
 
 import entidades.Comensal;
 import entidades.Restaurante;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.Assert.*;
+import java.util.stream.Collectors;
+
 
 public class RecomendacionesServiceTest {
 
@@ -34,33 +36,30 @@ public class RecomendacionesServiceTest {
         todosRestaurantes.add(r3);
 
         // Act
-        List<Restaurante> recomendados = new ArrayList<>();
-        for (Restaurante r : todosRestaurantes) {
-            if (r.getTipoComida() != null && r.getTipoComida().equals(comensal.getTipoComidaFavorita())) {
-                recomendados.add(r);
-            }
-        }
-
-        // Ordenar descendente por puntaje
-        recomendados.sort((a, b) -> {
-            Double aScore = a.getPuntajePromedio();
-            Double bScore = b.getPuntajePromedio();
-            if (aScore == null && bScore == null) return 0;
-            if (aScore == null) return 1;  // Los nulos van al final
-            if (bScore == null) return -1; // Los nulos van al final
-            return Double.compare(bScore, aScore);
-        });
+        List<Restaurante> recomendados = todosRestaurantes.stream()
+            .filter(r -> r.getTipoComida() != null &&
+                         r.getTipoComida().equals(comensal.getTipoComidaFavorita()))
+            .sorted((a, b) -> {
+                Double aScore = a.getPuntajePromedio();
+                Double bScore = b.getPuntajePromedio();
+                if (aScore == null && bScore == null) return 0;
+                if (aScore == null) return 1;
+                if (bScore == null) return -1;
+                return Double.compare(bScore, aScore);
+            })
+            .collect(Collectors.toList()); // Cambiado a collect(Collectors.toList())
 
         // Assert
-        assertEquals(2, recomendados.size());
-        assertEquals("Comida Vegetariana", recomendados.get(0).getTipoComida());
-        assertEquals("Comida Vegetariana", recomendados.get(1).getTipoComida());
-
-        // Verificar que el primer restaurante tiene mayor puntaje que el segundo
-        assertNotNull("Puntaje del primer restaurante no debe ser nulo", recomendados.get(0).getPuntajePromedio());
-        assertNotNull("Puntaje del segundo restaurante no debe ser nulo", recomendados.get(1).getPuntajePromedio());
-        assertTrue("El primer restaurante debería tener mayor puntaje que el segundo: " +
-                        recomendados.get(0).getPuntajePromedio() + " > " + recomendados.get(1).getPuntajePromedio(),
-                recomendados.get(0).getPuntajePromedio() > recomendados.get(1).getPuntajePromedio());
+        assertAll(
+            () -> assertEquals(2, recomendados.size(), "Deberían haber 2 restaurantes recomendados"),
+            () -> assertEquals("Comida Vegetariana", recomendados.get(0).getTipoComida()),
+            () -> assertEquals("Comida Vegetariana", recomendados.get(1).getTipoComida()),
+            () -> assertNotNull(recomendados.get(0).getPuntajePromedio(),
+                "Puntaje del primer restaurante no debe ser nulo"),
+            () -> assertNotNull(recomendados.get(1).getPuntajePromedio(),
+                "Puntaje del segundo restaurante no debe ser nulo"),
+            () -> assertTrue(recomendados.get(0).getPuntajePromedio() > recomendados.get(1).getPuntajePromedio(),
+                "El primer restaurante debería tener mayor puntaje que el segundo")
+        );
     }
 }

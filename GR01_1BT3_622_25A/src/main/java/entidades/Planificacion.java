@@ -10,10 +10,13 @@ public class Planificacion {
     public String nombre;
     public String hora;
     public String estado;
+    public String estadoVotacion; // "No iniciada", "En progreso", "Terminada"
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "planificacion_comensal", joinColumns = @JoinColumn(name = "planificacion_id"), inverseJoinColumns = @JoinColumn(name = "comensal_id"))
     private List<Comensal> comensales = new ArrayList<>();
 
@@ -21,9 +24,15 @@ public class Planificacion {
     @JoinColumn(name = "idComensalPlanificador")
     private Comensal comensalPlanificador;
 
+    // Changed to ManyToMany to support multiple restaurants
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "planificacion_restaurante", joinColumns = @JoinColumn(name = "planificacion_id"), inverseJoinColumns = @JoinColumn(name = "restaurante_id"))
+    private List<Restaurante> restaurantes = new ArrayList<>();
+
+    // Restaurant with the highest number of votes
     @ManyToOne
-    @JoinColumn(name = "restaurante_id")
-    private Restaurante restaurante;
+    @JoinColumn(name = "restaurante_ganador_id")
+    private Restaurante restauranteGanador;
 
     public Planificacion() {
     }
@@ -62,17 +71,6 @@ public class Planificacion {
         return comensales;
     }
 
-    public Restaurante getRestaurante() {
-        return restaurante;
-    }
-
-    public void setRestaurante(Restaurante restaurante) {
-        if (restaurante == null || restaurante.getNombre() == null || restaurante.getNombre().trim().isEmpty()) {
-            throw new IllegalArgumentException("Restaurante no válido");
-        }
-        this.restaurante = restaurante;
-    }
-
     public void setComensales(List<Comensal> comensales) {
         this.comensales = comensales;
     }
@@ -87,9 +85,35 @@ public class Planificacion {
         this.comensales.add(comensal);
     }
 
+    public List<Restaurante> getRestaurantes() {
+        if (this.restaurantes == null) {
+            this.restaurantes = new ArrayList<>();
+        }
+        return restaurantes;
+    }
+
+    public void setRestaurantes(List<Restaurante> restaurantes) {
+        this.restaurantes = restaurantes;
+    }
+
+    public void addRestaurante(Restaurante restaurante) {
+        if (restaurante == null || restaurante.getNombre() == null || restaurante.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("Restaurante no válido");
+        }
+        if (this.restaurantes == null) {
+            this.restaurantes = new ArrayList<>();
+        }
+        if (!this.restaurantes.contains(restaurante)) {
+            this.restaurantes.add(restaurante);
+        }
+    }
 
     public String getEstado() {
         return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Comensal getComensalPlanificador() {
@@ -98,9 +122,5 @@ public class Planificacion {
 
     public void setComensalPlanificador(Comensal comensalPlanificador) {
         this.comensalPlanificador = comensalPlanificador;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 }

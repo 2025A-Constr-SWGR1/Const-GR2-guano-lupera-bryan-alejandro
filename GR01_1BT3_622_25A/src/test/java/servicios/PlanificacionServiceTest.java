@@ -4,156 +4,171 @@ import DAO.PlanificacionDAO;
 import entidades.Comensal;
 import entidades.Planificacion;
 import entidades.Restaurante;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class PlanificacionServiceTest {
+
+    @InjectMocks
+    private PlanificacionService planificacionService;
+
     @Test
-    public void given_name_hour_when_create_planification_then_planification_not_null() {
+    void givenNameAndHour_whenCreatePlanification_thenPlanificationNotNull() {
+        // Arrange
         String nombre = "Cena de Fin de Año";
         String hora = "20:00";
-
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
         Comensal comensal = new Comensal();
+
+        // Act
         Planificacion planificacion = planificacionService.crearPlanificacion(nombre, hora, comensal);
 
-        assertNotNull(planificacion);
+        // Assert
+        assertNotNull(planificacion, "La planificación no debería ser nula");
+        assertEquals(nombre, planificacion.getNombre(), "El nombre no coincide");
+        assertEquals(hora, planificacion.getHora(), "La hora no coincide");
     }
 
     @Test
-    public void given_diner_when_add_to_planification_then_ok() {
-        String nombre = "Almuerzo UTP";
-        String hora = "12:30";
-
+    void givenDiners_whenAddToPlanification_thenSuccess() {
+        // Arrange
+        Planificacion planificacion = new Planificacion("Almuerzo UTP", "12:30");
         List<Comensal> comensales = Arrays.asList(new Comensal(), new Comensal());
-        Planificacion planificacion = new Planificacion(nombre, hora);
 
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
-        Boolean exito = planificacionService.agregarComensales(planificacion, comensales);
+        // Act
+        boolean exito = planificacionService.agregarComensales(planificacion, comensales);
 
-        assertTrue(exito);
+        // Assert
+        assertTrue(exito, "Debería retornar true al agregar comensales");
+        assertEquals(2, planificacion.getComensales().size(), "Debería tener 2 comensales");
     }
 
     @Test
-    public void given_duplicate_diner_when_add_to_planification_then_throw_exception() {
+    void givenDuplicateDiner_whenAddToPlanification_thenThrowException() {
+        // Arrange
         Planificacion planificacion = new Planificacion("Almuerzo UTP", "12:30");
         Comensal comensal = new Comensal();
         comensal.setId(1L);
-
-        // Agregar por primera vez (éxito)
         planificacion.addComensal(comensal);
 
-        // Intentar agregar duplicado (debe fallar)
-        try {
-            planificacion.addComensal(comensal);
-            fail("Debería haber lanzado IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertEquals("El comensal ya está en esta planificación", e.getMessage());
-        }
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> planificacion.addComensal(comensal),
+            "Debería lanzar IllegalArgumentException");
+
+        assertEquals("El comensal ya está en esta planificación", exception.getMessage());
     }
 
     @Test
-    public void given_restaurant_when_set_to_planification_then_association_ok() {
+    void givenRestaurant_whenSetToPlanification_thenAssociationOk() {
+        // Arrange
         Planificacion planificacion = new Planificacion("Cena de equipo", "19:00");
         Restaurante restaurante = new Restaurante();
         restaurante.setId(1L);
         restaurante.setNombre("La Cevichería");
 
-        planificacion.setRestaurante(restaurante);
-        Restaurante restauranteAsociado = planificacion.getRestaurante();
+        // Act
+        planificacion.addRestaurante(restaurante);
 
-        assertNotNull("El restaurante no debería ser null", planificacion.getRestaurante());
-        assertEquals("La Cevichería", planificacion.getRestaurante().getNombre());
+        // Assert
+        assertAll("Verificación de asociación de restaurante",
+            () -> assertFalse(planificacion.getRestaurantes().isEmpty(),
+                "La lista de restaurantes no debería estar vacía"),
+            () -> assertEquals("La Cevichería",
+                planificacion.getRestaurantes().get(0).getNombre(),
+                "El nombre del restaurante no coincide")
+        );
     }
 
     @Test
-    public void given_time_when_calculate_remaining_time_then_ok() {
-        // Hora actual simulada
+    void givenTime_whenCalculateRemainingTime_thenOk() {
+        // Arrange
         LocalDateTime ahora = LocalDateTime.of(2025, 5, 12, 12, 30);
-        // Hora límite de votación
         LocalDateTime horaLimite = LocalDateTime.of(2025, 5, 12, 13, 0);
 
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
+        // Act
         int minutos = planificacionService.calcularMinutosRestantesParaVotacion(ahora, horaLimite);
 
-        assertEquals(30, minutos);
+        // Assert
+        assertEquals(30, minutos, "Los minutos restantes no coinciden");
     }
 
     @Test
-    public void given_votes_when_get_most_voted_restaurant_then_ok() {
+    void givenVotes_whenGetMostVotedRestaurant_thenOk() {
+        // Arrange
         Map<Restaurante, Integer> votos = new HashMap<>();
         Restaurante restaurante1 = new Restaurante();
         Restaurante restaurante2 = new Restaurante();
-        Restaurante restaurante3 = new Restaurante();
 
         votos.put(restaurante1, 3);
         votos.put(restaurante2, 1);
-        votos.put(restaurante3, 2);
 
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
+        // Act
         Restaurante restauranteMasVotado = planificacionService.obtenerRestauranteMasVotado(votos);
 
-        assertNotNull("El restaurante no debería ser null", restauranteMasVotado);
-        assertEquals(restaurante1, restauranteMasVotado);
+        // Assert
+        assertAll("Verificación de restaurante más votado",
+            () -> assertNotNull(restauranteMasVotado, "El restaurante no debería ser null"),
+            () -> assertEquals(restaurante1, restauranteMasVotado,
+                "El restaurante más votado no coincide")
+        );
     }
 
     @Test
-    public void give_two_restaurants_when_resolve_empate_then_return_restaurant_randomly() {
-
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
+    void givenTie_whenResolveTie_thenReturnRandomRestaurant() {
+        // Arrange
         Restaurante restaurante1 = new Restaurante();
-        restaurante1.setNombre("Restaurante A");
         Restaurante restaurante2 = new Restaurante();
-        restaurante2.setNombre("Restaurante B");
 
         Map<Restaurante, Integer> votos = new HashMap<>();
         votos.put(restaurante1, 5);
         votos.put(restaurante2, 5);
 
+        // Act
         Restaurante resultado = planificacionService.resolverEmpateEnVotacion(votos);
-        assertNotNull(resultado);
+
+        // Assert
+        assertNotNull(resultado, "El resultado no debería ser null");
+        assertTrue(votos.containsKey(resultado),
+            "El restaurante devuelto debe estar en la lista de votos");
     }
 
     @Test
-    public void given_planificacion_when_cancel_planificacion_then_ok() {
+    void givenPlanification_whenCancel_thenStatusChanged() {
+        // Arrange
         Comensal comensal = new Comensal();
-
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
         Planificacion planificacion = planificacionService.crearPlanificacion("Comida Grupal", "12:00", comensal);
 
+        // Act
         planificacionService.cancelarPlanificacion(planificacion);
 
-        assertEquals("Cancelado", planificacion.getEstado());
+        // Assert
+        assertEquals("Cancelado", planificacion.getEstado(),
+            "El estado debería ser 'Cancelado'");
     }
 
     @Test
-    public void given_restaurante_when_recomendarRestaurante_then_return_true() {
-
-        PlanificacionDAO planificacionDAONull = null;
-        PlanificacionService planificacionService = new PlanificacionService(planificacionDAONull);
+    void givenGoodRestaurant_whenRecommend_thenReturnTrue() {
+        // Arrange
         Restaurante restauranteMock = mock(Restaurante.class);
         when(restauranteMock.getPuntajePromedio()).thenReturn(4.0);
         when(restauranteMock.getDistanciaUniversidad()).thenReturn(3.0);
         when(restauranteMock.getTiempoEspera()).thenReturn(20);
 
+        // Act
         boolean esRecomendado = planificacionService.recomendarRestaurante(restauranteMock);
-        assertNotNull(esRecomendado);
+
+        // Assert
+        assertTrue(esRecomendado, "El restaurante debería ser recomendado");
     }
 }

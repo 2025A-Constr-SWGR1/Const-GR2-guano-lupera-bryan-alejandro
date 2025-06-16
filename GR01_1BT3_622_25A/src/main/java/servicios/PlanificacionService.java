@@ -47,7 +47,7 @@ public class PlanificacionService {
 
     public Planificacion crearPlanificacion(String nombre, String hora, Comensal comensal) {
         validarParametrosCreacion(nombre, hora);
-        Planificacion planificacion = new Planificacion(nombre, hora);
+        Planificacion planificacion = new Planificacion(hora, nombre);
         if (comensal == null) {
             throw new IllegalArgumentException("Comensal no encontrado");
         }

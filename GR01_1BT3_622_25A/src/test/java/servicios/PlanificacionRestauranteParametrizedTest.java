@@ -2,58 +2,42 @@ package servicios;
 
 import entidades.Planificacion;
 import entidades.Restaurante;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import java.util.Arrays;
-import java.util.Collection;
-import static org.junit.Assert.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import java.util.stream.Stream;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(Parameterized.class)
 public class PlanificacionRestauranteParametrizedTest {
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> datosDePrueba() {
-        return Arrays.asList(new Object[][]{
-                // nombrePlanificacion, hora, nombreRestaurante, esperadoValido
-                {"Almuerzo UTP", "12:30", "La Cevichería", true},
-                {"Cena Team", "19:00", null, false},           // Restaurante nulo (inválido)
-                {"Desayuno", "08:00", "", false}               // Nombre restaurante vacío (inválido)
-        });
+    public static Stream<Object[]> datosDePrueba() {
+        return Stream.of(
+            new Object[]{"Almuerzo UTP", "12:30", "La Cevichería", true},
+            new Object[]{"Cena Team", "19:00", null, false},           // Restaurante nulo (inválido)
+            new Object[]{"Desayuno", "08:00", "", false}               // Nombre restaurante vacío (inválido)
+        );
     }
 
-    private String nombrePlanificacion;
-    private String hora;
-    private String nombreRestaurante;
-    private boolean esperadoValido;
-
-    public PlanificacionRestauranteParametrizedTest(String nombrePlanificacion, String hora,
-                                                    String nombreRestaurante, boolean esperadoValido) {
-        this.nombrePlanificacion = nombrePlanificacion;
-        this.hora = hora;
-        this.nombreRestaurante = nombreRestaurante;
-        this.esperadoValido = esperadoValido;
-    }
-
-    @Test
-    public void testAsociarRestauranteAPlanificacion() {
+    @ParameterizedTest
+    @MethodSource("datosDePrueba")
+    public void testAsociarRestauranteAPlanificacion(String nombrePlanificacion, String hora,
+                                                   String nombreRestaurante, boolean esperadoValido) {
         // Configuración
-        Planificacion planificacion = new Planificacion(hora, nombrePlanificacion);
+        Planificacion planificacion = new Planificacion(nombrePlanificacion, hora);
         Restaurante restaurante = (nombreRestaurante != null && !nombreRestaurante.isEmpty())
                 ? new Restaurante() {{ setNombre(nombreRestaurante); }}
                 : null;
 
         // Ejecución y verificación
         if (!esperadoValido) {
-            try {
-                planificacion.setRestaurante(restaurante);
-                fail("Debería haber lanzado IllegalArgumentException");
-            } catch (IllegalArgumentException e) {
-                assertTrue(e.getMessage().contains("Restaurante no válido"));
-            }
+            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                planificacion.addRestaurante(restaurante);
+            });
+            assertTrue(exception.getMessage().contains("Restaurante no válido"));
         } else {
-            planificacion.setRestaurante(restaurante);
-            assertEquals(nombreRestaurante, planificacion.getRestaurante().getNombre());
+            planificacion.addRestaurante(restaurante);
+            // Verificar que el último restaurante añadido sea el esperado
+            Restaurante ultimoRestaurante = planificacion.getRestaurantes().get(planificacion.getRestaurantes().size() - 1);
+            assertEquals(nombreRestaurante, ultimoRestaurante.getNombre());
         }
     }
 }
