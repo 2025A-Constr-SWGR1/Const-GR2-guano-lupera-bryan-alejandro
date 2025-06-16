@@ -3,7 +3,6 @@ name: Java web Build
 on:
   push:
     branches: [ main ]
-# hola
 jobs:
   build:
     runs-on: self-hosted
