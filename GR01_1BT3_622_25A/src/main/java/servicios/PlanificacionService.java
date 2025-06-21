@@ -1,13 +1,11 @@
 package servicios;
 
-import DAO.CalificacionDAO;
 import DAO.PlanificacionDAO;
 import DAO.UsuarioDAOImpl;
 import entidades.Comensal;
 import entidades.Planificacion;
 import entidades.Restaurante;
 import jakarta.persistence.*;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,12 +15,9 @@ import java.util.stream.Collectors;
 
 public class PlanificacionService {
     private final PlanificacionDAO planificacionDAO;
-    private final UsuarioDAOImpl usuarioDAO;
-
     private final NotificacionServiceInterface notificacionService;
-
+    private static final Random random = new Random();
     private EntityManagerFactory emf;
-
 
     public PlanificacionService(PlanificacionDAO planificacionDAO) {
         if (planificacionDAO == null) {
@@ -36,14 +31,14 @@ public class PlanificacionService {
         notificacionService = null;
 
     }
+
     // Para el test
     public PlanificacionService(NotificacionServiceInterface notificacionService) {
         this.planificacionDAO = null;
-        //this.calificacionDAO = null;
+        // this.calificacionDAO = null;
         this.usuarioDAO = null;
         this.notificacionService = notificacionService;
     }
-
 
     public Planificacion crearPlanificacion(String nombre, String hora, Comensal comensal) {
         validarParametrosCreacion(nombre, hora);
@@ -75,14 +70,6 @@ public class PlanificacionService {
             }
         }
         return true;
-    }
-
-    private Planificacion findPlanificacion(EntityManager em, Long planificacionId) {
-        Planificacion planificacion = em.find(Planificacion.class, planificacionId);
-        if (planificacion == null) {
-            throw new EntityNotFoundException("Planificación no encontrada con ID: " + planificacionId);
-        }
-        return planificacion;
     }
 
     public Boolean recomendarRestaurante(Restaurante restaurante) {
@@ -141,7 +128,6 @@ public class PlanificacionService {
                 .collect(Collectors.toList());
 
         if (empatados.size() > 1) {
-            Random random = new Random();
             return empatados.get(random.nextInt(empatados.size()));
         }
         return empatados.isEmpty() ? null : empatados.get(0);

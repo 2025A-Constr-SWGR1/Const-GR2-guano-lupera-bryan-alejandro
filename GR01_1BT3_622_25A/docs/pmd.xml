@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd" version="6.55.0" timestamp="2025-06-16T17:11:19.065">
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\DAO\PlanificacionDAO.java">
+<violation beginline="10" endline="10" begincolumn="1" endcolumn="31" rule="UnnecessaryImport" ruleset="Code Style" package="DAO" class="PlanificacionDAO" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'java.util.logging.Level'
+</violation>
+<violation beginline="14" endline="14" begincolumn="33" endcolumn="38" rule="UnusedPrivateField" ruleset="Best Practices" package="DAO" class="PlanificacionDAO" variable="LOGGER" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'LOGGER'.
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servicios\CalificacionService.java">
+<violation beginline="9" endline="9" begincolumn="1" endcolumn="41" rule="UnnecessaryImport" ruleset="Code Style" package="servicios" class="CalificacionService" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'jakarta.persistence.EntityManager'
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servicios\NotificacionService.java">
+<violation beginline="15" endline="15" begincolumn="34" endcolumn="36" rule="UnusedPrivateField" ruleset="Best Practices" package="servicios" class="NotificacionService" variable="emf" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'emf'.
+</violation>
+<violation beginline="60" endline="63" begincolumn="17" endcolumn="17" rule="CollapsibleIfStatements" ruleset="Design" package="servicios" class="NotificacionService" method="marcarNotificacionComoLeida" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_design.html#collapsibleifstatements" priority="3">
+These nested if statements could be combined
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servicios\PlanificacionService.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="27" rule="UnnecessaryImport" ruleset="Code Style" package="servicios" class="PlanificacionService" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'DAO.CalificacionDAO'
+</violation>
+<violation beginline="20" endline="20" begincolumn="34" endcolumn="43" rule="UnusedPrivateField" ruleset="Best Practices" package="servicios" class="PlanificacionService" variable="usuarioDAO" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'usuarioDAO'.
+</violation>
+<violation beginline="80" endline="80" begincolumn="27" endcolumn="83" rule="UnusedPrivateMethod" ruleset="Best Practices" package="servicios" class="PlanificacionService" method="findPlanificacion" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_bestpractices.html#unusedprivatemethod" priority="3">
+Avoid unused private methods such as 'findPlanificacion(EntityManager,Long)'.
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servlets\SvIndex.java">
+<violation beginline="19" endline="19" begincolumn="1" endcolumn="29" rule="UnnecessaryImport" ruleset="Code Style" package="servlets" class="SvIndex" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'java.util.Collections'
+</violation>
+<violation beginline="20" endline="20" begincolumn="1" endcolumn="28" rule="UnnecessaryImport" ruleset="Code Style" package="servlets" class="SvIndex" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'java.util.Comparator'
+</violation>
+<violation beginline="22" endline="22" begincolumn="1" endcolumn="35" rule="UnnecessaryImport" ruleset="Code Style" package="servlets" class="SvIndex" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'java.util.stream.Collectors'
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servlets\SvPreferencia.java">
+<violation beginline="65" endline="65" begincolumn="35" endcolumn="87" rule="UselessParentheses" ruleset="Code Style" package="servlets" class="SvPreferencia" method="extraerParametrosPreferencia" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="67" endline="67" begincolumn="33" endcolumn="81" rule="UselessParentheses" ruleset="Code Style" package="servlets" class="SvPreferencia" method="extraerParametrosPreferencia" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses.
+</violation>
+<violation beginline="69" endline="69" begincolumn="32" endcolumn="78" rule="UselessParentheses" ruleset="Code Style" package="servlets" class="SvPreferencia" method="extraerParametrosPreferencia" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses.
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servlets\SvRestaurante.java">
+<violation beginline="104" endline="104" begincolumn="25" endcolumn="42" rule="UnusedFormalParameter" ruleset="Best Practices" package="servlets" class="SvRestaurante" method="procesarSubscribirse" variable="restauranteUsuario" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_bestpractices.html#unusedformalparameter" priority="3">
+Avoid unused method parameters such as 'restauranteUsuario'.
+</violation>
+<violation beginline="146" endline="149" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Error Prone" package="servlets" class="SvRestaurante" method="procesarSubscribirse" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_errorprone.html#emptycatchblock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="D:\actions-runner\_work\construccion_examen\construccion_examen\src\main\java\servlets\SvSuscripcion.java">
+<violation beginline="48" endline="48" begincolumn="18" endcolumn="58" rule="UnusedPrivateMethod" ruleset="Best Practices" package="servlets" class="SvSuscripcion" method="obtenerIdComensal" externalInfoUrl="https://pmd.github.io/pmd-6.55.0/pmd_rules_java_bestpractices.html#unusedprivatemethod" priority="3">
+Avoid unused private methods such as 'obtenerIdComensal(HttpServletRequest)'.
+</violation>
+</file>
+</pmd>

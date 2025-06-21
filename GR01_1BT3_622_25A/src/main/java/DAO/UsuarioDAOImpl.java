@@ -10,6 +10,9 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     private final EntityManagerFactory emf;
 
     public UsuarioDAOImpl(EntityManagerFactory emf) {
+        if (emf == null) {
+            throw new IllegalArgumentException("EntityManagerFactory cannot be null");
+        }
         this.emf = emf;
     }
 

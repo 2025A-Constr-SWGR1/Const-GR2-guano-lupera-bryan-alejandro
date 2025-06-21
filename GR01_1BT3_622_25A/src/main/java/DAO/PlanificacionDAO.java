@@ -5,16 +5,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PlanificacionDAO {
-    private static final Logger LOGGER = Logger.getLogger(CalificacionDAO.class.getName());
     private final EntityManagerFactory emf;
 
     public PlanificacionDAO(EntityManagerFactory emf) {
+        if (emf == null) {
+            throw new IllegalArgumentException("EntityManagerFactory cannot be null");
+        }
         this.emf = emf;
     }
 

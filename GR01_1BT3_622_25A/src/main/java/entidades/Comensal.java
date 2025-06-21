@@ -29,7 +29,6 @@ public class Comensal extends Usuario {
         this.setTipoUsuario("COMENSAL");
     }
 
-
     public Comensal(String nombreUsuario, String contrasena, String email, List<Preferencia> preferencias) {
         this.setNombreUsuario(nombreUsuario);
         this.setContrasena(contrasena);
@@ -38,7 +37,6 @@ public class Comensal extends Usuario {
         this.preferencias = preferencias;
         this.planificaciones = null;
 
-        // Establece la relación bidireccional
         if (preferencias != null) {
             preferencias.forEach(p -> p.setComensal(this));
         }
@@ -59,13 +57,11 @@ public class Comensal extends Usuario {
     public void setPreferencias(List<Preferencia> preferencias) {
         this.preferencias = preferencias;
 
-        // Establece la relación bidireccional
         if (preferencias != null) {
             preferencias.forEach(p -> p.setComensal(this));
         }
     }
 
-    // Método de conveniencia para manejar la relación
     public void agregarPreferencia(Preferencia preferencia) {
         preferencias.add(preferencia);
         preferencia.setComensal(this);

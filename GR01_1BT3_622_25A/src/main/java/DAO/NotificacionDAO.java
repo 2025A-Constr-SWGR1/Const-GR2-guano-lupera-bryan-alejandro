@@ -8,6 +8,9 @@ public class NotificacionDAO {
     private EntityManagerFactory emf;
 
     public NotificacionDAO(EntityManagerFactory emf) {
+        if (emf == null) {
+            throw new IllegalArgumentException("EntityManagerFactory cannot be null");
+        }
         this.emf = emf;
     }
 

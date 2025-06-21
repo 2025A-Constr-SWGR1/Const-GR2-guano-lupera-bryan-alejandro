@@ -5,21 +5,13 @@ import DAO.UsuarioDAO;
 import entidades.Comensal;
 import entidades.Notificacion;
 import entidades.Restaurante;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 public class NotificacionService {
 
     private UsuarioDAO usuarioDAO;
     private NotificacionDAO notificacionDAO;
-    private EntityManagerFactory emf;
 
     public NotificacionService(UsuarioDAO usuarioDAO, NotificacionDAO notificacionDAO) {
-        if (usuarioDAO == null && notificacionDAO == null) {
-            this.emf = null;
-        } else {
-            this.emf = Persistence.createEntityManagerFactory("UFood_PU");
-        }
         this.usuarioDAO = usuarioDAO;
         this.notificacionDAO = notificacionDAO;
     }
@@ -54,15 +46,20 @@ public class NotificacionService {
     }
 
     public Boolean marcarNotificacionComoLeida(Notificacion notificacion) {
-        if (notificacion != null && notificacion.getId() != null) {
-            Notificacion notifBD = notificacionDAO.buscarPorId(notificacion.getId());
-            if (notifBD != null && !notifBD.isLeida()) {
-                if (marcarComoLeida(notifBD)) {
-                    notificacionDAO.actualizar(notifBD);
-                    return true;
-                }
-            }
+        if (notificacion == null || notificacion.getId() == null) {
+            return false;
         }
-        return false;
+
+        Notificacion notifBD = notificacionDAO.buscarPorId(notificacion.getId());
+        if (notifBD == null || notifBD.isLeida()) {
+            return false;
+        }
+
+        if (!marcarComoLeida(notifBD)) {
+            return false;
+        }
+
+        notificacionDAO.actualizar(notifBD);
+        return true;
     }
 }

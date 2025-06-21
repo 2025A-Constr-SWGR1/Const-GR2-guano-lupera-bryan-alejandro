@@ -6,7 +6,6 @@ import entidades.Calificacion;
 import entidades.Comensal;
 import entidades.Restaurante;
 import exceptions.ServiceException;
-import jakarta.persistence.EntityManager;
 
 import java.util.List;
 import java.util.Map;

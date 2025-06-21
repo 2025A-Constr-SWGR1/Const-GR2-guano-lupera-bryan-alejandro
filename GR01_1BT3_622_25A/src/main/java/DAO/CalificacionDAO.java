@@ -16,6 +16,9 @@ public class CalificacionDAO {
     private final EntityManagerFactory emf;
 
     public CalificacionDAO(EntityManagerFactory emf) {
+        if (emf == null) {
+            throw new IllegalArgumentException("EntityManagerFactory cannot be null");
+        }
         this.emf = emf;
     }
 

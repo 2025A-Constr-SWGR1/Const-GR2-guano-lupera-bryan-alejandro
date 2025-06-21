@@ -14,6 +14,9 @@ public class SuscripcionDAO {
     private final EntityManagerFactory emf;
 
     public SuscripcionDAO(EntityManagerFactory emf) {
+        if (emf == null) {
+            throw new IllegalArgumentException("EntityManagerFactory cannot be null");
+        }
         this.emf = emf;
     }
 

@@ -45,68 +45,6 @@ public class SvSuscripcion extends HttpServlet {
         }
     }
 
-    private Long obtenerIdComensal(HttpServletRequest req) {
-        String idComensalString = req.getParameter("idComensal");
-        if (idComensalString == null || idComensalString.isEmpty()) {
-            return null;
-        }
-        try {
-            return Long.parseLong(idComensalString);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-    // private void procesarDesuscribirse(HttpServletRequest req,
-    // HttpServletResponse resp)
-    // throws IOException {
-    // try {
-    // // Obtener el id del comensal
-    // Long idComensal = Long.parseLong(req.getParameter("idComensal"));
-
-    // // Obtener el comensal
-    // Comensal comensal = usuarioDAO.obtenerComensalPorId(idComensal);
-    // if (comensal == null) {
-    // resp.sendRedirect(req.getContextPath() + "/inicio?error=" +
-    // URLEncoder.encode("Comensal no encontrado", "UTF-8"));
-    // return;
-    // }
-
-    // // Obtener el id del restaurante
-    // String idRestauranteStr = req.getParameter("idRestaurante");
-    // if (idRestauranteStr == null) {
-    // resp.sendRedirect(req.getContextPath() + "/inicio?error=" +
-    // URLEncoder.encode("Restaurante no especificado", "UTF-8"));
-    // return;
-    // }
-    // Long idRestaurante = Long.parseLong(idRestauranteStr);
-
-    // // Obtener el restaurante
-    // Restaurante restaurante = (Restaurante) usuarioDAO.findById(idRestaurante);
-    // if (restaurante == null) {
-    // resp.sendRedirect(req.getContextPath() + "/inicio?error=" +
-    // URLEncoder.encode("Restaurante no encontrado", "UTF-8"));
-    // return;
-    // }
-
-    // // Desuscribir al comensal
-    // comensal.desuscribirseDeRestaurante(restaurante);
-
-    // // Guardar los cambios
-    // usuarioDAO.save(comensal);
-
-    // // Actualizar la sesión
-    // req.getSession().setAttribute("usuario", comensal);
-
-    // // Redirigir con mensaje de éxito
-    // resp.sendRedirect(req.getContextPath() + "/inicio?success=" +
-    // URLEncoder.encode("Te has desuscrito exitosamente de " +
-    // restaurante.getNombre(), "UTF-8"));
-    // } catch (Exception e) {
-    // resp.sendRedirect(req.getContextPath() + "/inicio?error=" +
-    // URLEncoder.encode("Error al desuscribirse: " + e.getMessage(), "UTF-8"));
-    // }
-    // }
-
     @Override
     public void destroy() {
         if (usuarioDAO != null)

@@ -60,14 +60,12 @@ public class SvPreferencia extends HttpServlet {
         String horaAperturaStr = req.getParameter("horaApertura");
         String horaCierreStr = req.getParameter("horaCierre");
         String distanciaStr = req.getParameter("distancia");
-
-
-        LocalTime horaApertura = (horaAperturaStr != null && !horaAperturaStr.isEmpty()) ?
-                LocalTime.parse(horaAperturaStr) : null;
-        LocalTime horaCierre = (horaCierreStr != null && !horaCierreStr.isEmpty()) ?
-                LocalTime.parse(horaCierreStr) : null;
-        Double distanciaMax = (distanciaStr != null && !distanciaStr.isEmpty()) ?
-                Double.parseDouble(distanciaStr) : null;
+        LocalTime horaApertura = horaAperturaStr != null && !horaAperturaStr.isEmpty()
+                ? LocalTime.parse(horaAperturaStr)
+                : null;
+        LocalTime horaCierre = horaCierreStr != null && !horaCierreStr.isEmpty() ? LocalTime.parse(horaCierreStr)
+                : null;
+        Double distanciaMax = distanciaStr != null && !distanciaStr.isEmpty() ? Double.parseDouble(distanciaStr) : null;
 
         parametrosPreferencia.put("tipoComida", req.getParameter("tipoComida"));
         parametrosPreferencia.put("horaApertura", horaApertura);

@@ -16,7 +16,7 @@ U-Food es una aplicación web, desarrollado en Java, está diseñado para facili
 - Proponer el menú del día siguiente a través de votaciones de los comensales.
 
 ## Run Locally
-
+### Docker (Recomendado)
 Para correr el proyecto localmente a través de Docker:
 
 1. Descargar la imagen del proyecto desde Docker Hub:
@@ -27,10 +27,6 @@ docker run -p 8080:8080 bryang02/u-food:lts
 ```
 
 2. Acceder a la aplicación con el siguiente link: http://localhost:8080/login
-
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
 ## Tech Stack
 
