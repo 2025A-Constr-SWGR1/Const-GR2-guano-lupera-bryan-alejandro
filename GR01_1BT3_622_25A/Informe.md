@@ -53,7 +53,7 @@ Resultado del linting de PMD arrojó 17 violaciones, agrupadas en 7 tipos de pro
 
 Para más detalles de las violaciones encontradas por PMD [click aquí](docs/pmd.xml)
 
-#### 2.4. Pruebas Unitarias y de Integración
+#### 1.4. Pruebas Unitarias y de Integración
 
 Ejecución de todas las pruebas JUnit:
 
@@ -67,14 +67,12 @@ El resultado de la ejecución de los tests unitarios se resume de la siguiente m
 | Test Class | Tests Run | Failures | Errors | Skipped | Time Elapsed (s) |
 |---------------------------------------------|-----------|----------|--------|---------|------------------|
 | servicios.NotificacionServiceParametrizedTest | 2         | 0        | 0      | 0       | 0.085            |
-| servicios.PlanificacionRestauranteParametrizedTest | 3         | 0        | 0      | 0       | 0.014            |
-| servicios.PlanificacionServiceTest           | 9         | 0        | 0      | 0       | 0.658            |
-| servicios.PlanificacionSugerirParametrizedTest | 5         | 0        | 0      | 0       | 0.011            |
 | servicios.PreferenciaMatchingTest            | 1         | 0        | 0      | 0       | 0.001            |
 | servicios.RecomendacionesServiceTest         | 1         | 0        | 0      | 0       | 0.004            |
 | servicios.RecomendacionServiceParametrizedTest | 1         | 0        | 0      | 0       | 0.026            |
-| **TOTAL**                                   | **22**    | **0**    | **0**  | **0**   | **6.049**        |
-#### 2.5. Empaquetado
+| **TOTAL**                                   | **5**    | **0**    | **0**  | **0**   | **0.116**        |
+
+#### 1.5. Empaquetado
 
 Generación del archivo WAR para despliegue:
 
@@ -93,13 +91,38 @@ El archivo generado se guarda como artefacto para su posterior uso:
     path: target/ROOT.war
 ```
 
-#### 2.6. Construcción de Imagen Docker
+### 2. Dockerización
 
-El workflow verifica el estado de Docker Desktop y construye la imagen:
+Los comandos necesarios para dockerizar U-Food con el propósito de correrlo en diferentes PC's son los siguientes.
 
-```yaml
-- name: Contruir la imagen de Docker
-  run: |
-    docker build -t u-food .
-    docker tag u-food bryang02/u-food:latest
+- Crear la imagen:
+
 ```
+    docker build -t u-food1 .
+```
+
+- Correr dichar imagen:
+
+```
+    docker run -p 8080:8080 u-food1
+```
+
+- Subir a Docker Hub:
+
+```
+docker tag u-food1 bryang02/u-food1:lts
+docker push bryang02/u-food1:lts
+```
+
+[Link](https://hub.docker.com/r/bryang02/u-food1) del contenedor en Docker Hub.
+
+### 3. Indicaciones para desplegar el Contenedor de la App Web
+
+Descargar la imagen del proyecto desde Docker Hub a través de la terminal:
+
+```
+    docker pull bryang02/u-food1:lts
+    docker run -p 8081:8080 bryang02/u-food1:lts
+```
+
+Para acceder al aplicativo seguir el siguiente link: http://localhost:8081/

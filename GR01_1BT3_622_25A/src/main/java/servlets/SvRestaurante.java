@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalTime;
 
-import org.hibernate.engine.jdbc.env.internal.LobCreationLogging_.logger;
-
 @WebServlet(name = "SvRestaurante", value = "/restaurante")
 public class SvRestaurante extends HttpServlet {
     private EntityManagerFactory emf;

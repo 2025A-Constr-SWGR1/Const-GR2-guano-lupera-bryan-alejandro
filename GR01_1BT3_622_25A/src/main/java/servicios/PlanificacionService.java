@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class PlanificacionService {
     private final PlanificacionDAO planificacionDAO;
+    private final UsuarioDAOImpl usuarioDAO;
     private final NotificacionServiceInterface notificacionService;
     private static final Random random = new Random();
     private EntityManagerFactory emf;
@@ -26,7 +27,6 @@ public class PlanificacionService {
             this.emf = Persistence.createEntityManagerFactory("UFood_PU");
         }
         this.planificacionDAO = planificacionDAO;
-
         this.usuarioDAO = new UsuarioDAOImpl(emf);
         notificacionService = null;
 
