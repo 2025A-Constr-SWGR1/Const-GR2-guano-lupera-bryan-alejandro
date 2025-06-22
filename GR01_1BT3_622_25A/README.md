@@ -2,6 +2,8 @@
 
 U-Food es una aplicación web, desarrollado en Java, está diseñado para facilitar la interacción entre comensales y restaurantes ubicados cerca de una universidad. Su objetivo principal es permitir que los usuarios  encuentren opciones gastronómicas mediante las calificaciones de restaurantes.
 
+- **[Informe](Informe.md)**
+
 ## Features
 
 **Comensales:**
